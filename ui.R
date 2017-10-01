@@ -1,37 +1,69 @@
 source("helpers.R")
 
 
+
 navbarPage("Signal",
            tabPanel("Summary",
-                    verbatimTextOutput("sumTab_summary")
+                    
+					textInput("sumTab_dateInput", "Date range:", value = "2017-01-01"),
+					hr(),
+					
+					h4(textOutput("sumTab_dateDisplay")),
+					fluidRow(
+						
+						box(formattableOutput("sumTab_summary"))
+						
+					),
+					verbatimTextOutput("sumTab_test"),
+					verbatimTextOutput("sumTab_debug")
+					
+					
+					
+					
            ),
            tabPanel("Plot",
                     sidebarLayout(
                       sidebarPanel(
                         
-                        textInput("i_code", "Stock Number (No description)", placeholder = "Stock Number"),
+                        textInput("plotTab_code", "Stock Number (No description)", placeholder = "Stock Number"),
                         
-                        #dateRangeInput("i_daterange", "Date range:", format = "yyyy-mm-dd", start = (Sys.Date() - 30), end = Sys.Date(), min = "2010-01-01", max = Sys.Date() + 7),
-                        dateRangeInput("i_daterange", "Date range:", format = "yyyy-mm-dd", start = "2017-01-01", end = "2018-12-31", min = "2010-01-01", max = "2018-12-31"),
+                        # TODO: 
+                        dateRangeInput("plotTab_daterange", "Date range:", format = "yyyy-mm-dd", start = "2017-01-01", end = "2018-12-31", min = "2010-01-01", max = "2018-12-31"),
                         
+						# Radio button to choose signal for evalutaion
+						radioButtons("plotTab_chooseSignal", 
+									label = h3("Signal"),
+									choices = signal_radioButton_list, 
+									selected = "none"),
                         hr(),
                         
-                        submitButton("Update View")
+                        actionButton("plotTab_button", "Update View")
                         
                         
                       ),
                       
                       mainPanel(
                         h4("Plot"),
-                        plotOutput("out_mainplot"),
+                        plotOutput("plotTab_mainplot"),
                         
+						h4("Test"),
+                        verbatimTextOutput("plotTab_test"),
+						
                         h4("Summary"),
-                        verbatimTextOutput("out_summary"),
+                        verbatimTextOutput("plotTab_summary"),
                         
+						
+						
                         h4("Debug"),
-                        verbatimTextOutput("out_debug")
+                        verbatimTextOutput("plotTab_debug")
                       )
                     )
+           ),
+		   tabPanel("About",
+
+					# Test include html
+					includeHTML("./aboutPage.html")
            )
            
+
 )
